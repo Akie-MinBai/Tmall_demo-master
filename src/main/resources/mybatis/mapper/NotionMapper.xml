@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.tmall.dao.NotionMapper">
+    <insert id="insertOne" parameterType="notion">
+        INSERT notion (notion_id,notion_name,notion_image_src)
+            VALUES (
+            null,
+            #{notion.notion_name},
+            #{notion.notion_image_src})
+    </insert>
+    <update id="updateOne" parameterType="notion">
+        UPDATE notion
+        <set>
+            <if test="notion.notion_name != null">notion_name = #{notion.notion_name},</if>
+            <if test="notion.notion_image_src != null">notion_image_src = #{notion.notion_image_src}</if>
+        </set>
+        <where>
+            notion_id = #{notion.notion_id}
+        </where>
+    </update>
+    <select id="select" resultType="notion">
+        SELECT notion_id,notion_name,notion_image_src FROM notion
+        <where>
+            <if test="notion_name != null">notion_name LIKE concat('%',#{notion_name},'%')</if>
+        </where>
+        <if test="pageUtil != null">
+            LIMIT #{pageUtil.pageStart},#{pageUtil.count}
+        </if>
+    </select>
+    <select id="selectOne" parameterType="int" resultType="notion">
+        SELECT notion_id,notion_name,notion_image_src FROM notion
+        <where>
+            notion_id = #{notion_id}
+        </where>
+    </select>
+    <select id="selectTotal" resultType="int">
+        SELECT COUNT(notion_id) FROM notion
+        <where>
+            <if test="notion_name != null">notion_name LIKE concat('%',#{notion_name},'%')</if>
+        </where>
+    </select>
+</mapper>
